@@ -1,0 +1,5 @@
+output
+node_modules
+downloads
+package-lock.json
+.DS_Store
