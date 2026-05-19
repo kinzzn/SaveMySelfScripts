@@ -5,7 +5,13 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DOWNLOAD_DIR = path.join(__dirname, 'downloads');
-const OUTPUT_FILE = path.join(__dirname, 'output2.json');
+
+const inputFile = process.argv[2];
+if (!inputFile) {
+  console.error('Usage: node download.js <filename>\n  e.g. node download.js 2ffc7fb8-8a97-45c4-94ff-c27499aba925_9b0ac515-3fe9-460c-bac8-7aa79a8f7753.json');
+  process.exit(1);
+}
+const OUTPUT_FILE = path.join(__dirname, 'output', inputFile);
 
 function sanitizeFilename(name) {
   return name
