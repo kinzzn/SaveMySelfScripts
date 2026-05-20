@@ -238,21 +238,26 @@ async function main() {
       continue;
     }
 
-    const { videoUrls, imageUrls } = await getMediaFromPost(page, post.id, post.post_type);
-    if (videoUrls.length > 0) {
-      console.log(`  ✓ ${videoUrls.length} video(s)`);
-    } else {
-      console.log(`  ✗ No Vimeo iframe found`);
-    }
-    if (imageUrls.length > 0) {
-      console.log(`  ✓ ${imageUrls.length} image(s)`);
-    }
+    try {
+      const { videoUrls, imageUrls } = await getMediaFromPost(page, post.id, post.post_type);
+      if (videoUrls.length > 0) {
+        console.log(`  ✓ ${videoUrls.length} video(s)`);
+      } else {
+        console.log(`  ✗ No Vimeo iframe found`);
+      }
+      if (imageUrls.length > 0) {
+        console.log(`  ✓ ${imageUrls.length} image(s)`);
+      }
 
-    results.push({
-      ...post,
-      videoUrl: videoUrls.length === 1 ? videoUrls[0] : videoUrls.length > 1 ? videoUrls : null,
-      imageUrls: imageUrls.length > 0 ? imageUrls : null,
-    });
+      results.push({
+        ...post,
+        videoUrl: videoUrls.length === 1 ? videoUrls[0] : videoUrls.length > 1 ? videoUrls : null,
+        imageUrls: imageUrls.length > 0 ? imageUrls : null,
+      });
+    } catch (e) {
+      console.error(`  ✗ Error processing post: ${e.message}`);
+      results.push({ ...post, videoUrl: null, imageUrls: null, error: e.message });
+    }
 
     // Save incrementally
     fs.writeFileSync(OUTPUT_FILE, JSON.stringify(results, null, 2));
