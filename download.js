@@ -6,11 +6,13 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DOWNLOAD_DIR = path.join(__dirname, 'downloads');
 
-const inputFile = process.argv[2];
+const inputFile = process.argv.slice(2).find(arg => !arg.startsWith('--'));
 if (!inputFile) {
-  console.error('Usage: node download.js <filename>\n  e.g. node download.js 2ffc7fb8-8a97-45c4-94ff-c27499aba925_9b0ac515-3fe9-460c-bac8-7aa79a8f7753.json');
+  console.error('Usage: node download.js <filename> [--imageonly] [--videoonly]\n  e.g. node download.js 2ffc7fb8-8a97-45c4-94ff-c27499aba925_9b0ac515-3fe9-460c-bac8-7aa79a8f7753.json');
   process.exit(1);
 }
+const IMAGE_ONLY = process.argv.includes('--imageonly');
+const VIDEO_ONLY = process.argv.includes('--videoonly');
 const OUTPUT_FILE = path.join(__dirname, 'output', inputFile);
 
 function sanitizeFilename(name) {
@@ -54,7 +56,7 @@ async function main() {
     console.log(`[${i + 1}/${withMedia.length}] ${baseName}`);
 
     // Download videos
-    if (post.videoUrl) {
+    if (post.videoUrl && !IMAGE_ONLY) {
       const urls = Array.isArray(post.videoUrl) ? post.videoUrl : [post.videoUrl];
       for (let vi = 0; vi < urls.length; vi++) {
         const suffix = urls.length > 1 ? `_${vi + 1}` : '';
@@ -64,7 +66,7 @@ async function main() {
     }
 
     // Download images
-    if (post.imageUrls && post.imageUrls.length > 0) {
+    if (post.imageUrls && post.imageUrls.length > 0 && !VIDEO_ONLY) {
       const folderPath = path.join(DOWNLOAD_DIR, baseName);
       if (!fs.existsSync(folderPath)) fs.mkdirSync(folderPath, { recursive: true });
 

@@ -55,15 +55,13 @@ When your session expires, refresh `auth.json` with new values:
 
 ```bash
 # Full mode (overwrite existing output)
-node index.js
+node index.js "https://service.bwithu.app/posts?a=<ARTIST_ID>&t=<TAG_ID>"
 
 # Incremental mode (skip already-processed posts, append new ones)
-node index.js --incremental
+node index.js "https://service.bwithu.app/posts?a=<ARTIST_ID>&t=<TAG_ID>" --incremental
 ```
 
 Output is saved to `output/<ARTIST_ID>_<TAG_ID>.json`.
-
-To change the target artist/tag, edit `ARTIST_ID` and `TAG_ID` in `index.js`.
 
 ### 2. Test image filtering on a single page
 
@@ -92,13 +90,15 @@ Filter rules are in `imageFilter.js`. Current rules:
 ### 3. Download videos and images
 
 ```bash
-node download.js <filename>
+node download.js <filename> [--imageonly] [--videoonly]
 ```
 
 `<filename>` is the JSON file inside `output/`, e.g.:
 
 ```bash
 node download.js 2ffc7fb8-8a97-45c4-94ff-c27499aba925_9b0ac515-3fe9-460c-bac8-7aa79a8f7753.json
+node download.js 2ffc7fb8-8a97-45c4-94ff-c27499aba925_9b0ac515-3fe9-460c-bac8-7aa79a8f7753.json --imageonly
+node download.js 2ffc7fb8-8a97-45c4-94ff-c27499aba925_9b0ac515-3fe9-460c-bac8-7aa79a8f7753.json --videoonly
 ```
 
 Downloads are saved to `downloads/`:
