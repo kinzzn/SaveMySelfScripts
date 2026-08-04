@@ -90,7 +90,7 @@ Filter rules are in `imageFilter.js`. Current rules:
 ### 3. Download videos and images
 
 ```bash
-node download.js <filename> [--imageonly] [--videoonly]
+node download.js <filename> [--imageonly] [--videoonly] [--appendonly]
 ```
 
 `<filename>` is the JSON file inside `output/`, e.g.:
@@ -99,6 +99,23 @@ node download.js <filename> [--imageonly] [--videoonly]
 node download.js 2ffc7fb8-8a97-45c4-94ff-c27499aba925_9b0ac515-3fe9-460c-bac8-7aa79a8f7753.json
 node download.js 2ffc7fb8-8a97-45c4-94ff-c27499aba925_9b0ac515-3fe9-460c-bac8-7aa79a8f7753.json --imageonly
 node download.js 2ffc7fb8-8a97-45c4-94ff-c27499aba925_9b0ac515-3fe9-460c-bac8-7aa79a8f7753.json --videoonly
+node download.js 2ffc7fb8-8a97-45c4-94ff-c27499aba925_9b0ac515-3fe9-460c-bac8-7aa79a8f7753.json --appendonly
+```
+
+`--appendonly` uses a local state file (`.download-state.json`) keyed by `artistId` (not full output filename). If multiple output files share the same artist and only differ by tag, they share one download history. On the next run, it downloads only posts whose IDs are not in that artist history.
+
+State example:
+
+```json
+{
+  "2ffc7fb8-8a97-45c4-94ff-c27499aba925": {
+    "downloadedIds": [
+      "post-id-1",
+      "post-id-2"
+    ],
+    "updatedAt": "2026-08-03T09:25:41.123Z"
+  }
+}
 ```
 
 Downloads are saved to `downloads/`:
