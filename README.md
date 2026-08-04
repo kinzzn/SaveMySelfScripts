@@ -145,7 +145,10 @@ savemyselfscripts/
 - Add `auth.json` to `.gitignore` to avoid committing credentials.
 
 ## Changelog / Test References
-
+- **2026-08-04**: Download scripts add incremental mode. Deduplication works in .download-state.json, identifier listed under artist id.  Test command: 
+  ```bash
+  node download.js "c780365e-628a-44ba-93e6-669c200efea2_1c6a8f37-bc3e-4bf3-bab1-85098d0f4290.json" --appendonly
+  ```
 - **2026-05-19**: Image collection verified working with Flutter Web Shadow DOM. Test command:
   ```bash
   node testImages.js "https://service.bwithu.app/notes/f037c375-bf85-4488-aa23-534c3cb402d4?a=2ffc7fb8-8a97-45c4-94ff-c27499aba925&from=/posts?a=2ffc7fb8-8a97-45c4-94ff-c27499aba925&t=f223fa3f-2260-429e-83ea-63e49528a4fe"
